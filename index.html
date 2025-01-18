@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanilla Javascript and localStorage CRUD project</title>
+    <link rel="stylesheet" href="style.css">
+    <!--FONT: https://fonts.google.com/selection/embed-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1 class="header">Vanilla Javascript an localStorage CRUD project</h1>
+    <div class="appCont">
+        <div class="itemEditor">
+            <form class="itemEditorForm">
+                <label class="itemLabel" for="itemCode">Product Code</label>
+                <input type="number" min="1" title="Product Code" class="itemInput" id="itemCode" placeholder="Only Numbers..." required>
+                <label class="itemLabel" for="itemName">Product Name</label>
+                <input type="text" title="Product Name" class="itemInput" id="itemName" required>
+                <label class="itemLabel" for="itemCode">Product Quantity</label>
+                <input type="text" title="Product Quantity" class="itemInput" id="itemQuantity" required>
+                <div class="buttons">
+                    <button type="button" class="itemBtn" id="itemEditorBtnNew">Insert New</button>
+                    <button type="button" class="itemBtn" id="itemEditorBtnEdit">Edit Item</button>
+                    <button type="button" class="itemBtn" id="itemEditorBtnDelete">Delete From List</button>
+                </div>
+            </form>
+            <div id="editorOutput">
+                <table id="editorOutputTable">
+                    <tr>
+                        <th>Product Code</th>
+                        <th>Product Name</th>
+                        <th>Product Quantity</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="itemFinder">
+            <h2 class="itemFinderHeader">Find Product By Code</h2>
+            <form class="itemFinderForm">
+                <label class="itemLabel" for="itemFinderCode">Product Code</label>
+                <input type="text" title="Product Code" class="itemInput" id="itemFinderCode" placeholder="Only Numbers..." required>
+                <button type="button" class="itemBtn" id="itemFinderBtn">Select From List</button>
+            </form>
+            <div id="finderOutput">
+                <table id="finderOutputTable">
+                    <tr>
+                        <th>Product Code</th>
+                        <th>Product Name</th>
+                        <th>Product Quantity</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script src="index.js"></script>
+</body>
+</html>
