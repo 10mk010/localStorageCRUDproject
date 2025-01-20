@@ -11,49 +11,90 @@
 const itemInputCode = document.getElementById("itemCode");
 const itemInputName = document.getElementById("itemName");
 const itemInputQuantity = document.getElementById("itemQuantity");
-const itemFinderCode = document.getElementById("itemFinderCode");
 const btnNew = document.getElementById('itemEditorBtnNew');
 const btnEdit = document.getElementById('itemEditorBtnEdit');
 const btnDelete = document.getElementById('itemEditorBtnDelete');
-const itemFinderBtn = document.getElementById('itemFinderBtn')
 const editorOutput = document.getElementById('editorOutput');
-const finderOutput = document.getElementById('finderOutput');
 const editorOutputTable = document.getElementById("editorOutputTable");
-const finderOutputTable = document.getElementById("finderOutputTable");
 
-let data = [
-    { id: 1, name: "Pienas", quantity: "2l"},
-    { id: 2, name: "Obuoliai", quantity: "2kg"}
-]
-function readAll(){
-    localStorage.setItem("cartList", JSON.stringify(data));
-    const cartList = localStorage.getItem("cartList")
+let data = JSON.parse(localStorage.getItem("cartList")) || [];
+const cartList = localStorage.getItem("cartList");
 
-    btnNew.addEventListener("click", () => {
-        if(itemInputCode.value in JSON.parse(cartList)){
-            alert("An item with this product code is already in the table!");
-            return;
-        } else if (itemInputName.value in JSON.parse(cartList)){
-            alert("An item that goes by this name is already in the table!");
-            return;
-        }
-        const newItem = {id: itemInputCode.value, name: itemInputName.value, quantity: itemInputQuantity.value};
-        data.push(newItem)
+function renderStoredItems() {
+    data.forEach(item => {
         const tr = document.createElement("tr");
-        tr.id = `item${itemInputCode.value}`;
+        tr.id = `item${item.id}`;
         const tdCode = document.createElement("td");
         const tdName = document.createElement("td");
         const tdQuantity = document.createElement("td");
-        tdCode.innerText = data[itemInputCode.value - 1].id;
-        tdName.innerText = data[itemInputCode.value - 1].name;
-        tdQuantity.innerText = data[itemInputCode.value - 1].quantity;
+        tdCode.innerText = item.id;
+        tdName.innerText = item.name;
+        tdQuantity.innerText = item.quantity;
         editorOutputTable.appendChild(tr);
         tr.append(tdCode, tdName, tdQuantity);
     });
+}
 
-    btnDelete.addEventListener("click", () => {
-        localStorage.clear()
-    })
-};
+btnNew.addEventListener("click", () => {
+    if(cartList.includes(itemInputCode.value)){
+        alert("There's an item that has this product code! Please enter the information again.");
+        return;
+    };
+    const newObj = {id: Number(itemInputCode.value), name: itemInputName.value, quantity: itemInputQuantity.value}
+    data.push(newObj);
+    localStorage.setItem("cartList", JSON.stringify(data));
+    renderStoredItems();
+    itemInputCode.value = "";
+    itemInputName.value = "";
+    itemInputQuantity.value = "";
+});
 
-readAll();
+btnEdit.addEventListener("click", () => {
+    if(cartList.includes(itemInputCode.value)){
+    const item = data.find(item => item.id == itemInputCode.value);
+    item.name = itemInputName.value;
+    item.quantity = itemInputQuantity.value;
+    renderStoredItems();
+    itemInputCode.value = "";
+    itemInputName.value = "";
+    itemInputQuantity.value = "";
+    alert("Changes applied!");
+    } else {
+        alert("There's no item with this product code!")
+    }
+})
+
+btnDelete.addEventListener("click", () => {
+    const item = data.find(item => item.id == itemInputCode.value);
+    if(data.includes(item)){
+        const index = data.indexOf(item);
+        data.splice(index, 1);
+        localStorage.setItem("cartList", JSON.stringify(data));
+        const tr = document.getElementById(`item${index + 1}`);
+        tr.remove();
+        alert("Item deleted!");
+    } else {
+        alert("There's no item with this product code!");
+    };
+
+})
+
+const itemFinderCode = document.getElementById("itemFinderCode");
+const itemFinderBtn = document.getElementById('itemFinderBtn');
+const finderOutput = document.getElementById('finderOutput');
+const finderOutputTable = document.getElementById("finderOutputTable");
+
+itemFinderBtn.addEventListener("click", () => {
+    const item = data.find(item => item.id == itemFinderCode.value);
+    const tr = document.createElement("tr");
+    tr.id = `item${item.id}`;
+    const tdCode = document.createElement("td");
+    const tdName = document.createElement("td");
+    const tdQuantity = document.createElement("td");
+    tdCode.innerText = item.id;
+    tdName.innerText = item.name;
+    tdQuantity.innerText = item.quantity;
+    finderOutputTable.appendChild(tr);
+    tr.append(tdCode, tdName, tdQuantity);
+})
+
